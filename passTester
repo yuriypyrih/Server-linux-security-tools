@@ -1,0 +1,26 @@
+#! /bin/sh
+
+stty -echo
+echo -n "Enter Password: "
+read password
+stty echo
+
+checkfor()
+{
+
+ pattern="$1"
+ errormsg="$2"
+
+ sedpattern="s/$pattern//g"
+
+ chop=$(echo "$password" | sed -e $sedpattern)
+
+ if [ "$password" = "$chop" ] ; then
+  echo "Fail: You haven't used any ${errormsg}."
+ fi
+}
+
+checkfor "[[:lower:]]" "lowercase letters"
+checkfor "[[:upper:]]" "uppdercase letters"
+checkfor "[[:digit:]]" "digits"
+checkfor "[[:punct:]]" "punctuation"
